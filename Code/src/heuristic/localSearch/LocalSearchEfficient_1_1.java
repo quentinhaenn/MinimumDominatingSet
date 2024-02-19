@@ -17,9 +17,9 @@ public class LocalSearchEfficient_1_1 implements ILocalSearch{
 
         while(improve){
             improve=checkImprove(sol,instance);
-            if(sol.evaluate()<= Main.best){
-                break;
-            }
+            //if(sol.evaluate()<= Main.best){
+            //    break;
+            //}
         }
 
         return sol;

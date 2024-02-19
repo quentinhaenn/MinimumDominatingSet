@@ -31,8 +31,6 @@ public class IG implements IAlgorithm{
     @Override
     public Result execute(Instance instance, boolean draw) {
 
-        System.out.println(instance.getName());
-
         long initialTime=System.currentTimeMillis();
         long totalTime = System.currentTimeMillis() - initialTime;
         float secs = totalTime / 1000f;
@@ -60,10 +58,9 @@ public class IG implements IAlgorithm{
 
         totalTime = System.currentTimeMillis() - initialTime;
         secs = totalTime / 1000f;
-
+        result.setSolutionSet(solution.getSelectedNodes());
         result.add("Time", secs);
         result.add("OF", bestOF);
-        System.out.println(secs+"\t"+bestOF);
         return result;
     }
 

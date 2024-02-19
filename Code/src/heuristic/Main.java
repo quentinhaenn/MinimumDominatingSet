@@ -16,13 +16,14 @@ import java.util.*;
 
 public class Main {
 
-    final static String pathFolder = "./Instances";
-
     final static boolean readAllFolders = false;
-    final static boolean readAllInstances = true;
+    final static boolean readAllInstances = false;
 
-    final static String folderIndex = "LiteratureInstances";
-    final static String instanceIndex = "astro-ph.txt";
+    final static String folderIndex = "adjacency_matrices";
+    static String instanceIndex = "temp.txt"; //= "waveform-5000_None.data";
+    final static String homeDir = System.getProperty("user.home");
+    static String resultPath; // = homeDir + "/Documents/feasibility-report-dominating-set/code/results/";
+    static String pathFolder; // = homeDir + "/Documents/feasibility-report-dominating-set/code/datasets/";
 
     static List<String> foldersNames;
     static List<String> instancesNames;
@@ -32,7 +33,11 @@ public class Main {
     static GIP constructive=new GIP();
     static LocalSearchEfficient_1_1 localSearchEfficient_1_1=new LocalSearchEfficient_1_1();
 
+    public static int best = Integer.MAX_VALUE;
     public static void main(String[] args) {
+        String folderPath = args[0];
+        String resultPath = args[1];
+        setPaths(folderPath, resultPath);
         algorithm=new IG(constructive, localSearchEfficient_1_1);
         execute();
     }
@@ -40,13 +45,13 @@ public class Main {
     private static void execute()  {
         File file=new File(pathFolder);
         instanceFolderPath = file.getPath() + "/";
-        printHeaders("./results/"+algorithm.toString()+".csv");
+        printHeaders(resultPath+"/result.txt");
         readData();
     }
 
     private static void printHeaders(String path) {
         try (PrintWriter pw = new PrintWriter(path)) {
-            pw.print("Instance;Time;OF");
+            pw.print("Instance;Time;OF;Solution_set");
             pw.println();
 
         } catch (IOException e) {
@@ -64,6 +69,10 @@ public class Main {
                 pw.print(result.get(i));
                 if (i < nElems-1) pw.print(";");
             }
+            pw.print(";");
+            Set<Integer> watchers=result.getSolutionSets();
+            pw.print(watchers);
+            
             pw.println();
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,9 +81,8 @@ public class Main {
     private static void readData(){
         foldersNames = Arrays.asList(new File(pathFolder).list());
 
-        if(readAllFolders) readAllFolders();
-        else if (foldersNames.contains(folderIndex)) readFolder(folderIndex);
-        else System.out.println("Folder index exceeds the bounds of the array");
+        readFolder(pathFolder);
+        //System.out.println("Folder index exceeds the bounds of the array");
 
     }
 
@@ -88,9 +96,10 @@ public class Main {
 
     private static void readFolder(String fileName){
         File file;
-        file=new File(pathFolder+"/"+fileName);
+        file=new File(pathFolder); //+"/"+fileName);
         if(!fileName.startsWith(".") && !fileName.startsWith("..") && file.isDirectory()){
             instancesNames = Arrays.asList(file.list());
+            System.out.println(instanceIndex);
             instanceFolderPath = file.getPath() + "/";
             if(readAllInstances) readAllInstances();
             else if (instancesNames.contains(instanceIndex)) readInstance(instanceIndex);
@@ -106,11 +115,15 @@ public class Main {
     }
 
     private static void readInstance(String instanceName){
-        System.out.println(instanceName);
         Instance instance=new Instance(instanceFolderPath +instanceName);
         RandomManager.setSeed(13);
         Result result= algorithm.execute(instance,false);
-        printResults("./results/"+algorithm.toString()+".csv", result, instanceName);
+        printResults(resultPath+"/result.txt", result, instanceName);
+    }
+
+    private static void setPaths(String folderPath, String resultPath){
+        Main.resultPath = resultPath;
+        Main.pathFolder = folderPath;
     }
 
 }

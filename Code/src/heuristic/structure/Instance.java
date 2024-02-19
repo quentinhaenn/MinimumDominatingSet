@@ -57,7 +57,6 @@ public class Instance {
             //    count+=1;
             //}
             //System.out.println(count);
-
             for (int i = 0; i< numNodes; i++){
                 adyacencyList[i]=new ArrayList<>(numNodes);
                 unSelectedNodes.add(i);

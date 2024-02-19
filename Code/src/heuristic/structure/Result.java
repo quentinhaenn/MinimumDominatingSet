@@ -2,6 +2,7 @@ package heuristic.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Result {
 
@@ -17,6 +18,7 @@ public class Result {
 
     private String instanceName;
     private List<Tuple> map=new ArrayList<>();
+    private Set<Integer> solutionSet;
 
     public Result(String instanceName){
         this.instanceName=instanceName;
@@ -40,5 +42,13 @@ public class Result {
 
     public String getInstanceName() {
         return instanceName;
+    }
+
+    public Set<Integer> getSolutionSets() {
+        return solutionSet;
+    }
+
+    public void setSolutionSet(Set<Integer> solutionSet) {
+        this.solutionSet = solutionSet;
     }
 }
